@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Week planner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="top">
+    <div>
+      <h1>Week planner</h1>
+      <p class="range" id="weekRange"></p>
+    </div>
+    <div class="tools">
+      <button type="button" class="btn primary" id="addBtn">Add task</button>
+      <details class="menu" id="menu">
+        <summary class="btn">More</summary>
+        <div class="menu-pop">
+          <button type="button" id="exportBtn">Download backup</button>
+          <button type="button" id="importBtn">Restore from backup</button>
+          <button type="button" id="untickBtn">Untick everything</button>
+          <button type="button" id="clearBtn" class="danger-text">Delete all tasks</button>
+        </div>
+      </details>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </div>
+  </header>
+
+  <main>
+    <section class="progress" aria-labelledby="progressTitle">
+      <div class="progress-main">
+        <h2 id="progressTitle">Revision progress</h2>
+        <p class="headline" id="headline"></p>
+
+        <div class="bar" id="bar" role="progressbar" aria-label="Revision goal progress"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="bar-planned" id="barPlanned"></div>
+          <div class="bar-done" id="barDone"></div>
+        </div>
+        <div class="bar-legend">
+          <span><i class="sw sw-done"></i>Done</span>
+          <span><i class="sw sw-planned"></i>Planned</span>
+        </div>
+
+        <p class="message" id="message"></p>
+
+        <dl class="stats">
+          <div><dt>Tasks done</dt><dd id="statTasks">0 of 0</dd></div>
+          <div><dt>Days with progress</dt><dd id="statDays">0 of 7</dd></div>
+          <div><dt>Still to schedule</dt><dd id="statLeft">0m</dd></div>
+        </dl>
+
+        <div class="goal">
+          <label for="goalInput">Weekly revision goal (hours)</label>
+          <input type="number" id="goalInput" min="0" max="168" step="0.5" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="progress-side">
+        <h2>By subject</h2>
+        <ul class="subjects" id="subjectList"></ul>
+
+        <h2 class="past-title">Past weeks</h2>
+        <ul class="history" id="historyList"></ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="scheduleTitle">
+      <h2 class="sr-only" id="scheduleTitle">Schedule, Sunday to Saturday</h2>
+      <div class="week" id="week"></div>
+    </section>
+  </main>
+
+  <dialog id="taskDialog" aria-labelledby="dialogTitle">
+    <form id="taskForm" class="dialog-form">
+      <h2 id="dialogTitle">Add task</h2>
+
+      <label class="field">
+        <span>Task</span>
+        <input type="text" id="fTitle" maxlength="120" required placeholder="e.g. Past paper, chapter 4">
+      </label>
+
+      <div class="row">
+        <label class="field">
+          <span>Type</span>
+          <select id="fType">
+            <option value="revision">Revision (counts toward goal)</option>
+            <option value="other">Other (class, work, personal)</option>
+          </select>
+        </label>
+        <label class="field" id="subjectField">
+          <span>Subject</span>
+          <input type="text" id="fSubject" maxlength="60" list="subjectOptions" placeholder="e.g. Biology">
+          <datalist id="subjectOptions"></datalist>
+        </label>
+      </div>
+
+      <div class="row three">
+        <label class="field">
+          <span>Day</span>
+          <select id="fDay"></select>
+        </label>
+        <label class="field">
+          <span>Start</span>
+          <input type="time" id="fStart" required value="09:00">
+        </label>
+        <label class="field">
+          <span>Minutes</span>
+          <input type="number" id="fDuration" min="5" max="720" step="5" required value="60">
+        </label>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn danger" id="deleteBtn" hidden>Delete</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn primary">Save task</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
